@@ -45,7 +45,7 @@ if (is.null(opt$chromosome) || is.null(opt$gene)){
     gene_name <- paste(gene_name)
 
     # Load the dataset.
-    path_to_rdata <- paste("/omics/groups/OE0436/internal/nabad/GenomeTornadoPlot/GenomeTornadoPlot-files/chr", chromosome, ".Rdata", sep="")
+    path_to_rdata <- paste("/home/n795d/workspace/genome-tornado-plot-wrapper/GenomeTornadoPlot-files/chr", chromosome, ".Rdata", sep="")
     load(path_to_rdata)
 
     # Rename columns.
