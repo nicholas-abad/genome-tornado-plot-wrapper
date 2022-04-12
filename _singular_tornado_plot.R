@@ -88,15 +88,14 @@ if (is.null(opt$chromosome) || is.null(opt$gene)){
 
     # Save plots.
     path_to_not_zoomed <- paste(
-      folder_of_plots, "/chr", chromosome, "_", gene_name, "_not_zoomed.png",
+      folder_of_plots, "/", gene_name, "_not_zoomed.png",
       sep=""
     )
-
     path_to_zoomed <- paste(
-      folder_of_plots, "/chr", chromosome, "_", gene_name, "_zoomed.png",
+      folder_of_plots, "/", gene_name, "_zoomed.png",
       sep=""
     )
-
+    print(paste("Path to Not Zoomed: ", path_to_not_zoomed))
     ggsave(
       file=path_to_not_zoomed,
       grid.arrange(not_zoomed[[2]])
