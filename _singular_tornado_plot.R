@@ -1,12 +1,14 @@
-# dependencies.packages = c('ggplot2', 'data.table', 'devtools','grid', 'gridExtra','tiff',"shiny","shinydashboard","entropy")
+dependencies.packages = c('ggplot2', 'data.table', 'devtools','grid', 'gridExtra','tiff',"shiny","shinydashboard","entropy")
 
-# install.packages(dependencies.packages)
+install.packages(dependencies.packages, repos = "http://cran.us.r-project.org")
 
 # if (!requireNamespace("BiocManager", quietly = TRUE))
-# install.packages("BiocManager")
+#   install.packages("BiocManager")
+
 
 # BiocManager::install(c('GenomicRanges','quantsmooth','IRanges'))
-# devtools::install()
+devtools::install()
+# install.packages("optparse", repos = "http://cran.us.r-project.org")
 library("optparse")
 
 args = commandArgs(trailingOnly=TRUE)
@@ -45,7 +47,7 @@ if (is.null(opt$chromosome) || is.null(opt$gene)){
     gene_name <- paste(gene_name)
 
     # Load the dataset.
-    path_to_rdata <- paste("/home/n795d/workspace/genome-tornado-plot-wrapper/GenomeTornadoPlot-files/chr", chromosome, ".Rdata", sep="")
+    path_to_rdata <- paste("/omics/groups/OE0436/internal/nabad/GenomeTornadoPlot-files/chr", chromosome, ".Rdata", sep="")
     load(path_to_rdata)
 
     # Rename columns.

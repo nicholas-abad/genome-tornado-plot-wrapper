@@ -23,6 +23,7 @@ if __name__ == "__main__":
         type="str",
         dest="output_folder",
         help="Path to the output folder. \n",
+        default="/omics/groups/OE0436/internal/nabad/TornadoPlot_Repository"
     )
 
     parser.add_option(
@@ -37,14 +38,16 @@ if __name__ == "__main__":
 
     (options, args) = parser.parse_args()
     start_time = time.time()
-    try:
-        data = pd.read_csv(options.path)
-    except:
-        data = pd.read_csv(options.path, delimiter = ";")
+    # try:
+    #     data = pd.read_csv(options.path)
+    # except:
+    #     data = pd.read_csv(options.path, delimiter = ";")
+
+    data = pd.read_csv(options.path, delimiter="\t")
 
     output_folder = options.output_folder
-
     for chromosome in data["#CHROM"].unique():
+        chromosome = str(chromosome)
         if not os.path.exists(os.path.join(output_folder, chromosome)):
             os.mkdir(os.path.join(output_folder, chromosome))
 
@@ -57,17 +60,20 @@ if __name__ == "__main__":
     # Create .sh scripts
     png_files_to_create = []
     print("Creating sh scripts...")
-    for idx, row in data.iloc[:500].iterrows():
-        chromosome = row["#CHROM"]
+    for idx, row in data.iterrows():
+        chromosome = str(row["#CHROM"])
         gene = row["GENE"]
 
         path_to_sh_script = os.path.join(folder_of_sh_scripts, f"{str(idx)}.sh")
         with open(path_to_sh_script, "w") as f:
+            f.write("cd /home/n795d/workspace/genome-tornado-plot-wrapper/GenomeTornadoPlot \n")
             f.write("module load R/4.0.0 \n")
             f.write(f"Rscript {options.rscript} --chromosome {chromosome} --gene {gene} --folder {os.path.join(output_folder, chromosome)}")
         
         png_file = os.path.join(output_folder, chromosome, f"chr{chromosome}_{gene}_not_zoomed.png")
         png_files_to_create.append((png_file, path_to_sh_script))
+    # print(folder_of_sh_scripts)
+    # assert False
 
 
     # Call each of the .sh scripts using the bsub function.
