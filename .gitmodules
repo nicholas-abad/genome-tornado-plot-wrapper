@@ -1,0 +1,6 @@
+[submodule "GenomeTornadoPlot"]
+	path = GenomeTornadoPlot
+	url = https://github.com/chenhong-dkfz/GenomeTornadoPlot.git
+[submodule "GenomeTornadoPlot-files"]
+	path = GenomeTornadoPlot-files
+	url = https://github.com/nicholas-abad/GenomeTornadoPlot-files.git
