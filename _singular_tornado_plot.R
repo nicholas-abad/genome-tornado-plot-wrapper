@@ -21,7 +21,7 @@ check_and_install <- function(packages) {
 
 # Ensure BiocManager is installed
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
-  install.packages("BiocManager")
+  install.packages("BiocManager", repos = getOption("repos"))
 }
 
 # Define the list of Bioconductor packages
@@ -37,7 +37,7 @@ check_and_install_bioc <- function(packages) {
   
   # Install the missing packages
   if (length(packages_to_install) > 0) {
-    BiocManager::install(packages_to_install)
+    BiocManager::install(packages_to_install, repos = getOption("repos"))
   } else {
     message("All Bioconductor packages are already installed.")
   }
