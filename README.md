@@ -58,6 +58,22 @@ python main.py \
 
 Ensure the input CSV has at least `#CHROM` and `GENE` columns.
 
+## Examples
+
+Running this `main.py` generates two PNG files: a chromosome-level plot and a zoomed-in version of that plot. An example of each of these can be seen below:
+
+#### Chromosome-level Plot
+
+<p align="center">
+   <img src="./assets/chr5_TERT_not_zoomed.png" width=70% height=70%>
+</p>
+
+#### Zoomed-in Plot
+
+<p align="center">
+   <img src="./assets/chr5_TERT_zoomed.png" width=70% height=70%>
+</p>
+
 ## License
 
 This wrapper script is based on the original GenomeTornadoPlot by chenhong-dkfz. Refer to their repository for licensing details.
