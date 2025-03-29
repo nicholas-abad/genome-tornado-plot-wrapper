@@ -1,13 +1,18 @@
+"""
+This script reads a file and runs GenomeTornadoPlots for each gene.
+It processes the data between specified row indices and outputs plots into chromosome-specific folders.
+"""
+
 import os
-import pandas as pd
-from optparse import OptionParser
-import shutil
-import glob
 import time
 import subprocess
+import pandas as pd
+from optparse import OptionParser
 
 if __name__ == "__main__":
     parser = OptionParser()
+
+    # Path to the input CSV file
     parser.add_option(
         "-p",
         "--path-to-csv",
@@ -17,6 +22,7 @@ if __name__ == "__main__":
         help="Path to the CSV file. \n",
     )
 
+    # Output folder to store plots
     parser.add_option(
         "-o",
         "--output-folder",
@@ -26,31 +32,7 @@ if __name__ == "__main__":
         help="Path to the output folder. \n",
     )
 
-    parser.add_option(
-        "-r",
-        "--rscript",
-        action="store",
-        type="str",
-        dest="rscript",
-        help="Path to the _singular_tornado_plot.R script. NOTE: This must be an absolute path. \n",
-    )
-
-    parser.add_option(
-        "--gtprepository",
-        action="store",
-        type="str",
-        dest="gtprepository",
-        help="Path to the GenomeTornadoPlot repository. NOTE: This must be an absolute path. \n",
-    )
-
-    parser.add_option(
-        "--gtpfilesrepository",
-        action="store",
-        type="str",
-        dest="gtpfilesrepository",
-        help="Path to the folder of GenomeTornadoPlot-files repository. NOTE: This must be an absolute path. \n",
-    )
-
+    # Delimiter used in the CSV file
     parser.add_option(
         "-d",
         "--delimiter",
@@ -61,6 +43,7 @@ if __name__ == "__main__":
         help="Delimiter/Separator of the dataframe (i.e. ',', '\t', ';') \n",
     )
 
+    # Index to start processing the CSV from
     parser.add_option(
         "-s",
         "--starting-index",
@@ -71,6 +54,7 @@ if __name__ == "__main__":
         help="Starting index of the dataframe to run GenomeTornadoPlots on. \n",
     )
 
+    # Index to stop processing the CSV at
     parser.add_option(
         "-e",
         "--ending-index",
@@ -81,20 +65,32 @@ if __name__ == "__main__":
         help="Ending index of the dataframe to run GenomeTornadoPlots on. \n",
     )
 
-    (options, args) = parser.parse_args()
+    (options, _) = parser.parse_args()
     start_time = time.time()
 
+    # Load and filter the input data
     data = pd.read_csv(options.path, delimiter=options.delimiter)
-
     data = data.iloc[int(options.starting_index) : int(options.ending_index)]
 
+    # Construct paths to local repositories and the R script based on script location
     output_folder = options.output_folder
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    gtprepository = os.path.join(script_dir, "GenomeTornadoPlot")            
+    path_to_rscript = os.path.join(script_dir, "_singular_tornado_plot.R")
+    gtpfilesrepository = os.path.join(script_dir, "GenomeTornadoPlot-files")
+            
+    # Ensure all necessary paths exist
+    for file in [gtprepository, path_to_rscript, gtpfilesrepository]:
+        assert os.path.exists(file), file
+
+    # Create the output directory and per-chromosome subdirectories
+    os.makedirs(output_folder, exist_ok=True)
 
     for chromosome in data["#CHROM"].unique():
-        chromosome = str(chromosome)
-        if not os.path.exists(os.path.join(output_folder, f"chr{chromosome}")):
-            os.mkdir(os.path.join(output_folder, f"chr{chromosome}"))
+        chromosome_folder = os.path.join(output_folder, f"chr{chromosome}")
+        os.makedirs(chromosome_folder, exist_ok=True)
 
+    # Loop through each gene and run GenomeTornadoPlot if output doesn't already exist
     for idx, row in data.iterrows():
         chromosome = str(row["#CHROM"])
         gene = row["GENE"]
@@ -113,7 +109,8 @@ if __name__ == "__main__":
         )
 
         if not already_exists:
-            gtp_command = f"Rscript {options.rscript} --chromosome {chromosome} --gene {gene} --folder {os.path.join(output_folder, f'chr{chromosome}')} --files {options.gtpfilesrepository} --repo {options.gtprepository}"
+            # Construct and run the R script command
+            gtp_command = f"Rscript {path_to_rscript} --chromosome {chromosome} --gene {gene} --folder {os.path.join(output_folder, f'chr{chromosome}')} --files {gtpfilesrepository} --repo {gtprepository}"
             print(f"Running {gtp_command}")
             process = subprocess.Popen(
                 gtp_command.split(" "),
@@ -122,6 +119,7 @@ if __name__ == "__main__":
                 text=True,
             )
             while True:
+                # Print stdout from the R script
                 output = process.stdout.readline()
                 if output == "" and process.poll() is not None:
                     break
@@ -130,9 +128,11 @@ if __name__ == "__main__":
 
             rc = process.poll()
 
+            # Print stderr if the R script fails
             if process.returncode != 0:
                 print(f"R script failed with return code {process.returncode}")
                 for line in process.stderr:
                     print(line.strip())
         else:
+            # Skip if plot images already exist
             print(f"{gene}(chr{chromosome}) already exists. Skipping...")
