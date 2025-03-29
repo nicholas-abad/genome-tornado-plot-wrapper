@@ -1,3 +1,5 @@
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+
 # Define the list of packages
 dependencies.packages <- c('ggplot2', 'data.table', 'devtools', 'grid', 'gridExtra', 'tiff', 'shiny', 'shinydashboard', 'entropy', 'optparse')
 
@@ -11,7 +13,7 @@ check_and_install <- function(packages) {
   
   # Install the missing packages
   if (length(packages_to_install) > 0) {
-    install.packages(packages_to_install, repos = "http://cran.us.r-project.org")
+    install.packages(packages_to_install, repos = getOption("repos"))
   } else {
     message("All packages are already installed.")
   }
