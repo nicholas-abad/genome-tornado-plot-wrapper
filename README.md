@@ -67,11 +67,11 @@ To run the wrapper script:
 
 ```bash
 python main.py \
-  --path-to-csv input.csv \
-  --output-folder output/ \
-  --delimiter "," \
+  --path-to-csv examples/sample_file.tsv \
+  --output-folder examples/output/ \
+  --delimiter "\t" \
   --starting-index 0 \
-  --ending-index 100
+  --ending-index 3
 ```
 
 ### Arguments
