@@ -18,6 +18,32 @@ git submodule update --init --recursive
 
 This will ensure that both `GenomeTornadoPlot/` and `GenomeTornadoPlot-files/` are available.
 
+## Using Conda
+
+To ensure reproducibility and install all necessary dependencies (Python, R, and Bioconductor packages), you can use the provided `environment.yml` file.
+
+### Create and activate the environment:
+
+If you're on Apple Silicon (M1/M2), run:
+
+```bash
+CONDA_SUBDIR=osx-64 conda env create -f environment.yml
+```
+
+Otherwise:
+
+```bash
+conda env create -f environment.yml
+```
+
+Then activate it:
+
+```bash
+conda activate gtp
+```
+
+This sets up the environment with all required packages for both Python and R scripts.
+
 ## Repository Structure
 
 ```
