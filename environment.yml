@@ -1,0 +1,15 @@
+name: gtp
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - r-base=4.2
+  - r-optparse
+  - r-ggplot2
+  - r-data.table
+  - r-gridextra
+  - r-devtools
+  - pip
+  - pip:
+      - pandas

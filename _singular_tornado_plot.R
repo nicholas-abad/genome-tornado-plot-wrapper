@@ -1,24 +1,5 @@
 options(repos = c(CRAN = "https://cloud.r-project.org"))
 
-# Define the list of packages
-dependencies.packages <- c('ggplot2', 'data.table', 'devtools', 'grid', 'gridExtra', 'tiff', 'shiny', 'shinydashboard', 'entropy', 'optparse')
-
-# Function to check if a package is installed
-check_and_install <- function(packages) {
-  # Get the names of installed packages
-  installed_packages <- installed.packages()[, "Package"]
-  
-  # Identify packages that are not installed
-  packages_to_install <- packages[!(packages %in% installed_packages)]
-  
-  # Install the missing packages
-  if (length(packages_to_install) > 0) {
-    install.packages(packages_to_install, repos = getOption("repos"))
-  } else {
-    message("All packages are already installed.")
-  }
-}
-
 # Ensure BiocManager is installed
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager", repos = getOption("repos"))
@@ -44,14 +25,10 @@ check_and_install_bioc <- function(packages) {
 }
 
 
-# Check and install the packages
-check_and_install(dependencies.packages)
-
-# Check and install the Bioconductor packages
-check_and_install_bioc(bioc_packages)
 
 library("optparse")
 library("ggplot2")
+library("GenomeTornadoPlot")
 
 args = commandArgs(trailingOnly=TRUE)
 option_list = list(
@@ -72,8 +49,6 @@ opt = parse_args(opt_parser)
 setwd(opt$repo)
 
 devtools::install()
-
-library(GenomeTornadoPlot)
 
 # Function to ensure a path ends with "/"
 ensure_trailing_slash <- function(path) {
