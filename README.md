@@ -90,15 +90,11 @@ Running this `main.py` generates two PNG files: a chromosome-level plot and a zo
 
 #### Chromosome-level Plot
 
-<p align="center">
-   <img src="./assets/chr5_TERT_not_zoomed.png" width=70% height=70%>
-</p>
+![](./assets/chr5_TERT_not_zoomed.png)
 
 #### Zoomed-in Plot
 
-<p align="center">
-   <img src="./assets/chr5_TERT_zoomed.png" width=70% height=70%>
-</p>
+![](./assets/chr5_TERT_zoomed.png)
 
 ## License
 
