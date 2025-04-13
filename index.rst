@@ -6,9 +6,8 @@
 Genome Tornado Plot Wrapper
 =========================================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+This is a Python wrapper for the `GenomeTornadoPlot <https://github.com/chenhong-dkfz/GenomeTornadoPlot>`_ R script. It streamlines the process of running the GenomeTornadoPlot visualization on a batch of genes based on a provided CSV file.
+
 
 
 .. toctree::
